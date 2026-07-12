@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ===== SEO ===== -->
+  <title>Alvin Ehrnberger – Montageservice &amp; mehr | Wien &amp; Niederösterreich</title>
+  <meta name="description" content="Montageservice und praktische Unterstützung in Wien und Niederösterreich. Zuverlässig, flexibel, persönlich – direkter Kontakt zu Alvin Ehrnberger.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Alvin Ehrnberger – Montageservice & mehr">
+  <meta property="og:description" content="Montageservice und praktische Unterstützung in Wien und Niederösterreich. Zuverlässig, flexibel, persönlich.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_AT">
+  <!-- PLATZHALTER: og:image und og:url ergänzen, sobald die finale Domain steht -->
+
+  <!-- PLATZHALTER: Favicon — eigene Datei ersetzen (favicon.svg / favicon.ico) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23F4EFE5'/><text x='50' y='68' font-size='52' text-anchor='middle' font-family='Helvetica,Arial,sans-serif' fill='%231C1B18' font-weight='bold'>AE</text></svg>">
+
+  <style>
+    /* ============================================================
+       ALVIN EHRNBERGER — MONTAGESERVICE & MEHR
+       Design-System: abgeleitet von der Visitenkarte
+       Ivory-Hintergrund · fast-schwarze Typografie · Messing-Akzente
+       ============================================================ */
+
+    :root {
+      --ivory:       #F4EFE5;   /* warmer Kartenhintergrund */
+      --ivory-deep:  #EDE6D8;   /* leicht dunkler für Abschnitte */
+      --ink:         #1C1B18;   /* fast schwarz, warm */
+      --ink-soft:    #4A4740;   /* Fließtext */
+      --brass:       #A9853C;   /* gedämpftes Gold/Messing */
+      --brass-soft:  #C7A96B;
+      --maxw: 62rem;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+
+    body {
+      background: var(--ivory);
+      color: var(--ink);
+      font-family: "Avenir Next", "Helvetica Neue", Helvetica, "Segoe UI", Arial, sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .wrap {
+      max-width: var(--maxw);
+      margin-inline: auto;
+      padding-inline: clamp(1.25rem, 5vw, 3rem);
+    }
+
+    /* ---------- feine Goldlinie (Visitenkarten-Element) ---------- */
+    .rule {
+      width: 5.5rem;
+      height: 1px;
+      background: var(--brass);
+      border: none;
+      margin: 1.4rem auto;
+    }
+    .rule--left { margin-inline: 0; }
+
+    /* ---------- sanftes Einblenden ---------- */
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .rise { animation: rise 0.9s ease both; }
+    .rise-2 { animation-delay: 0.15s; }
+    .rise-3 { animation-delay: 0.3s; }
+
+    /* ============================== HERO ============================== */
+    .hero {
+      min-height: 88svh;
+      display: grid;
+      place-content: center;
+      text-align: center;
+      padding-block: clamp(4rem, 10vh, 7rem);
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 7vw, 4.2rem);
+      font-weight: 700;
+      letter-spacing: clamp(0.12em, 1.5vw, 0.22em);
+      text-transform: uppercase;
+    }
+
+    .hero .tagline {
+      font-size: clamp(0.85rem, 2.4vw, 1.15rem);
+      letter-spacing: clamp(0.28em, 1.2vw, 0.42em);
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      font-weight: 500;
+    }
+
+    .hero .lead {
+      max-width: 34rem;
+      margin: 2rem auto 0;
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2.6rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 2.2rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      border: 1px solid var(--ink);
+      color: var(--ink);
+      background: transparent;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+    .btn--solid {
+      background: var(--ink);
+      color: var(--ivory);
+    }
+    .btn:hover, .btn:focus-visible { background: var(--brass); border-color: var(--brass); color: var(--ivory); }
+    .btn:focus-visible { outline: 3px solid var(--brass); outline-offset: 3px; }
+
+    /* ============================== SECTIONS ============================== */
+    section { padding-block: clamp(3.5rem, 9vh, 6rem); }
+
+    .kicker {
+      display: block;
+      font-size: 0.78rem;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: var(--brass);
+      font-weight: 600;
+      margin-bottom: 0.9rem;
+    }
+
+    h2 {
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .section-intro { max-width: 38rem; color: var(--ink-soft); margin-top: 1.1rem; }
+
+    /* ---------- Intro ---------- */
+    .intro { background: var(--ivory); }
+    .intro p { max-width: 40rem; color: var(--ink-soft); font-size: 1.08rem; }
+
+    /* ---------- Leistungen ---------- */
+    .services { background: var(--ivory-deep); }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+      gap: 1.1rem;
+      margin-top: 2.4rem;
+    }
+
+    .card {
+      background: var(--ivory);
+      border: 1px solid rgba(169, 133, 60, 0.35);
+      padding: 1.8rem 1.6rem;
+    }
+    .card h3 {
+      font-size: 1.02rem;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .card p { color: var(--ink-soft); font-size: 0.95rem; }
+
+    .services .note {
+      margin-top: 1.6rem;
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      font-style: italic;
+    }
+
+    /* ---------- Ablauf ---------- */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+      gap: 1.4rem;
+      margin-top: 2.4rem;
+      counter-reset: step;
+    }
+    .step { text-align: center; }
+    .step::before {
+      counter-increment: step;
+      content: counter(step, decimal-leading-zero);
+      display: block;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      color: var(--brass);
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+    }
+    .step h3 { font-size: 1rem; font-weight: 600; letter-spacing: 0.05em; }
+
+    /* ---------- Einsatzgebiet ---------- */
+    .area { background: var(--ivory-deep); text-align: center; }
+    .area p {
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    /* ---------- Kontakt ---------- */
+    .contact { text-align: center; }
+    .contact .name { font-size: 1.15rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+
+    .contact-links { margin-top: 1.6rem; display: grid; gap: 0.7rem; justify-items: center; }
+    .contact-links a {
+      color: var(--ink);
+      text-decoration: none;
+      font-size: clamp(1.05rem, 3vw, 1.35rem);
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--brass);
+      padding-bottom: 0.15rem;
+      transition: color 0.25s ease;
+    }
+    .contact-links a:hover, .contact-links a:focus-visible { color: var(--brass); }
+    .contact-links a:focus-visible { outline: 3px solid var(--brass); outline-offset: 4px; }
+
+    .contact .cta-row { margin-top: 2.4rem; }
+
+    /* ---------- Footer ---------- */
+    footer {
+      background: var(--ink);
+      color: var(--ivory);
+      padding-block: 2.2rem;
+      font-size: 0.85rem;
+    }
+    footer .wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer nav a {
+      color: var(--ivory);
+      opacity: 0.85;
+      margin-left: 1.4rem;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+    footer nav a:hover, footer nav a:focus-visible { border-color: var(--brass); opacity: 1; }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================== HERO ============================== -->
+  <header class="hero wrap">
+    <div>
+      <h1 class="rise">Alvin Ehrnberger</h1>
+      <hr class="rule rise-2" aria-hidden="true">
+      <p class="tagline rise-2">Montageservice &amp; mehr</p>
+      <p class="lead rise-3">Zuverlässige, praktische Unterstützung – persönlich, flexibel und direkt.</p>
+      <div class="cta-row rise-3">
+        <a class="btn btn--solid" href="tel:+436608268569">Anrufen</a>
+        <a class="btn" href="mailto:alvin.ehrnberger@gmail.com">E-Mail schreiben</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================== INTRO ============================== -->
+  <section class="intro" id="ueber">
+    <div class="wrap">
+      <span class="kicker">Worum es geht</span>
+      <h2>Anpacken, wo Unterstützung gebraucht wird.</h2>
+      <hr class="rule rule--left" aria-hidden="true">
+      <p>Ich unterstütze Privatkundinnen, Privatkunden und kleine Betriebe in Wien und Niederösterreich bei praktischen Aufgaben – verlässlich, unkompliziert und auf Augenhöhe. Kein großes Unternehmen, kein Callcenter: Sie sprechen direkt mit mir, wir stimmen ab, was gebraucht wird, und dann wird es erledigt.</p>
+    </div>
+  </section>
+
+  <!-- ============================== LEISTUNGEN ==============================
+       HINWEIS ZUM BEARBEITEN:
+       Die folgenden vier Karten sind PLATZHALTER-Kategorien.
+       Endgültige Leistungen werden später festgelegt.
+       Zum Ändern: einfach <h3> (Titel) und <p> (Beschreibung) austauschen.
+       Keine reglementierten Gewerbe eintragen (Elektro, Installateur, Bau …),
+       solange dafür keine Berechtigung vorliegt.
+  ======================================================================= -->
+  <section class="services" id="leistungen">
+    <div class="wrap">
+      <span class="kicker">Leistungen</span>
+      <h2>Was ich für Sie tun kann.</h2>
+      <hr class="rule rule--left" aria-hidden="true">
+
+      <div class="service-grid">
+        <!-- PLATZHALTER 1 -->
+        <div class="card">
+          <h3>Montagearbeiten</h3>
+          <p>Möbel, Regale und Alltagsgegenstände – sorgfältig montiert.</p>
+        </div>
+        <!-- PLATZHALTER 2 -->
+        <div class="card">
+          <h3>Auf- &amp; Abbau</h3>
+          <p>Unterstützung bei Auf- und Abbau – von einzelnen Stücken bis zum kompletten Umbau.</p>
+        </div>
+        <!-- PLATZHALTER 3 -->
+        <div class="card">
+          <h3>Praktische Unterstützung</h3>
+          <p>Helfende Hände für Aufgaben, die alleine schwer zu stemmen sind.</p>
+        </div>
+        <!-- PLATZHALTER 4 -->
+        <div class="card">
+          <h3>Individuelle Hilfe nach Absprache</h3>
+          <p>Sie haben etwas anderes im Kopf? Fragen Sie einfach – wir finden eine Lösung.</p>
+        </div>
+      </div>
+
+      <p class="note">Das genaue Leistungsangebot wird laufend erweitert – am besten direkt anfragen.</p>
+    </div>
+  </section>
+
+  <!-- ============================== ABLAUF ============================== -->
+  <section class="how" id="ablauf">
+    <div class="wrap">
+      <span class="kicker">So einfach geht’s</span>
+      <h2>Vom Anruf bis zur erledigten Arbeit.</h2>
+      <hr class="rule rule--left" aria-hidden="true">
+
+      <div class="steps-grid">
+        <div class="step"><h3>Anfrage</h3></div>
+        <div class="step"><h3>Kurz abstimmen</h3></div>
+        <div class="step"><h3>Termin vereinbaren</h3></div>
+        <div class="step"><h3>Erledigen</h3></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== EINSATZGEBIET ============================== -->
+  <section class="area" id="gebiet">
+    <div class="wrap">
+      <span class="kicker">Einsatzgebiet</span>
+      <p>Wien &amp; Niederösterreich</p>
+    </div>
+  </section>
+
+  <!-- ============================== KONTAKT ============================== -->
+  <section class="contact" id="kontakt">
+    <div class="wrap">
+      <span class="kicker">Kontakt</span>
+      <h2>Direkter Draht. Keine Warteschleife.</h2>
+      <hr class="rule" aria-hidden="true">
+
+      <p class="name">Alvin Ehrnberger</p>
+
+      <div class="contact-links">
+        <a href="tel:+436608268569">+43 660 826 85 69</a>
+        <a href="mailto:alvin.ehrnberger@gmail.com">alvin.ehrnberger@gmail.com</a>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn--solid" href="tel:+436608268569">Anrufen</a>
+        <a class="btn" href="mailto:alvin.ehrnberger@gmail.com">E-Mail schreiben</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== FOOTER ============================== -->
+  <footer>
+    <div class="wrap">
+      <p>© 2026 Alvin Ehrnberger · Montageservice &amp; mehr</p>
+      <nav aria-label="Rechtliches">
+        <!-- PLATZHALTER: Vor dem echten Livegang müssen Impressum & Datenschutz
+             als eigene Seiten ergänzt werden (impressum.html / datenschutz.html).
+             Inhalte NICHT erfinden — mit Steuerberatung/WKO-Vorlage abklären. -->
+        <a href="#" aria-disabled="true">Impressum (folgt)</a>
+        <a href="#" aria-disabled="true">Datenschutz (folgt)</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>
