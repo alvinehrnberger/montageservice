@@ -77,11 +77,10 @@
 
     /* ============================== HERO ============================== */
     .hero {
-      min-height: 88svh;
       display: grid;
       place-content: center;
       text-align: center;
-      padding-block: clamp(4rem, 10vh, 7rem);
+      padding-block: clamp(2.8rem, 7vh, 4.5rem) clamp(2.2rem, 5vh, 3.5rem);
     }
 
     .hero h1 {
@@ -339,23 +338,18 @@
       <hr class="rule rise-2" aria-hidden="true">
       <p class="tagline rise-2">Alvin Ehrnberger</p>
       <p class="lead rise-3">Zuverlässige, praktische Unterstützung – persönlich, flexibel und direkt.</p>
-      <div class="cta-row rise-3">
-        <a class="btn btn--solid" href="#kontakt">Anfrage schreiben</a>
-        <a class="btn" href="#leistungen">Leistungen ansehen</a>
-      </div>
     </div>
   </header>
 
   <!-- ============================== KONTAKT (CHAT) ============================== -->
-  <section class="contact" id="kontakt">
+  <section class="contact" id="kontakt" style="padding-block: clamp(2.2rem, 5vh, 3.5rem) clamp(3rem, 7vh, 5rem);">
     <div class="wrap">
       <div class="contact-head">
         <span class="kicker">Kontakt</span>
-        <h2>Schreiben Sie mir einfach.</h2>
-        <hr class="rule" aria-hidden="true">
+        <h2 class="rise-2">Schreiben Sie mir einfach.</h2>
       </div>
 
-      <div class="chat" aria-label="Kontakt-Chat">
+      <div class="chat rise-3" aria-label="Kontakt-Chat">
         <div class="chat-header"><span class="dot" aria-hidden="true"></span> Direkter Draht zu Alvin</div>
         <div class="chat-log" id="chatLog" aria-live="polite"></div>
         <form class="chat-form" id="chatForm">
