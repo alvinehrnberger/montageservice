@@ -80,14 +80,15 @@
       display: grid;
       place-content: center;
       text-align: center;
-      padding-block: clamp(2.8rem, 7vh, 4.5rem) clamp(2.2rem, 5vh, 3.5rem);
+      padding-block: clamp(2rem, 5vh, 3rem) clamp(1.4rem, 3vh, 2rem);
     }
 
     .hero h1 {
-      font-size: clamp(2rem, 7vw, 4.2rem);
+      font-size: clamp(1.25rem, 4.6vw, 2.9rem);
       font-weight: 700;
-      letter-spacing: clamp(0.12em, 1.5vw, 0.22em);
+      letter-spacing: clamp(0.06em, 0.9vw, 0.16em);
       text-transform: uppercase;
+      white-space: nowrap;
     }
 
     .hero .tagline {
@@ -100,9 +101,9 @@
 
     .hero .lead {
       max-width: 34rem;
-      margin: 2rem auto 0;
+      margin: 1rem auto 0;
       color: var(--ink-soft);
-      font-size: 1.05rem;
+      font-size: 1rem;
     }
 
     .cta-row {
@@ -241,10 +242,31 @@
       display: flex;
       flex-direction: column;
       gap: 0.8rem;
-      min-height: 14rem;
-      max-height: 22rem;
+      min-height: 9rem;
+      max-height: 18rem;
       overflow-y: auto;
     }
+
+    /* ---------- Vorschlags-Chips ---------- */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0 1.3rem 1.1rem;
+    }
+    .chip {
+      border: 1px solid var(--brass);
+      background: transparent;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+      padding: 0.45rem 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .chip:hover, .chip:focus-visible { background: var(--brass); color: var(--ivory); }
+    .chip:focus-visible { outline: 3px solid var(--brass); outline-offset: 2px; }
 
     .msg {
       max-width: 85%;
@@ -346,12 +368,16 @@
     <div class="wrap">
       <div class="contact-head">
         <span class="kicker">Kontakt</span>
-        <h2 class="rise-2">Schreiben Sie mir einfach.</h2>
       </div>
 
-      <div class="chat rise-3" aria-label="Kontakt-Chat">
+      <div class="chat rise-2" aria-label="Kontakt-Chat">
         <div class="chat-header"><span class="dot" aria-hidden="true"></span> Direkter Draht zu Alvin</div>
         <div class="chat-log" id="chatLog" aria-live="polite"></div>
+        <div class="chips" id="chatChips" aria-label="Vorschläge">
+          <button type="button" class="chip">Möbel aufbauen</button>
+          <button type="button" class="chip">Auf- oder Abbau</button>
+          <button type="button" class="chip">Etwas anderes</button>
+        </div>
         <form class="chat-form" id="chatForm">
           <input type="text" id="chatInput" autocomplete="off"
                  placeholder="Ihre Nachricht …"
@@ -457,8 +483,12 @@
 
   <script>
     /* ============================================================
-       Chat-Kontakt → n8n (Alvvyn Automation)
-       Ablauf: 1) Anliegen  2) Kontaktdaten  3) an n8n-Webhook senden
+       Chat-Kontakt → n8n (Alvvyn Automation)  v2
+       Ablauf: 1) Anliegen (+Kategorie-Erkennung)  2) Detail-Rückfrage
+               3) Kontaktdaten  4) an n8n-Webhook senden
+       Kategorien & Rückfragen sind bewusst als einfache Regeln gebaut
+       (robust, kostenlos). Ein KI-Schritt kann später in n8n ergänzt
+       werden, ohne dass sich an dieser Seite etwas ändern muss.
        ============================================================ */
     (function () {
       var WEBHOOK_URL = "https://alvvyn.app.n8n.cloud/webhook/montage-anfrage";
@@ -467,10 +497,32 @@
       var form  = document.getElementById("chatForm");
       var input = document.getElementById("chatInput");
       var send  = document.getElementById("chatSend");
+      var chips = document.getElementById("chatChips");
 
-      var step = 0;             // 0 = Anliegen, 1 = Kontakt, 2 = fertig
-      var anliegen = "";
-      var kontakt = "";
+      var step = 0;   /* 0 = Anliegen, 1 = Details, 2 = Kontakt, 3 = fertig */
+      var anliegen = "", details = "", kontakt = "", kategorie = "allgemein";
+
+      /* Kategorie-Erkennung – tolerant gegenüber Tippfehlern/Umgangssprache */
+      var KAT = [
+        { id: "moebel", worte: ["möbel", "moebel", "mobel", "kasten", "kästen", "kasten", "schrank", "schränke", "regal", "ikea", "bett", "tisch", "kommode", "zusammenbauen", "zam bauen", "montieren", "montage", "aufbauen", "aufbaun"] },
+        { id: "aufabbau", worte: ["umzug", "übersiedlung", "uebersiedlung", "umziehen", "abbau", "abbauen", "aufbau bühne", "tragen", "transport", "ausräumen", "einräumen", "entrümpel"] }
+      ];
+
+      function erkenneKategorie(text) {
+        var t = text.toLowerCase();
+        for (var i = 0; i < KAT.length; i++) {
+          for (var j = 0; j < KAT[i].worte.length; j++) {
+            if (t.indexOf(KAT[i].worte[j]) !== -1) return KAT[i].id;
+          }
+        }
+        return "allgemein";
+      }
+
+      var RUECKFRAGE = {
+        moebel:   "Alles klar, Möbelmontage! Um wie viele Möbelstücke handelt es sich ungefähr – und sind alle Teile schon bei Ihnen vor Ort?",
+        aufabbau: "Gerne! Worum geht es genau, und wann soll es ungefähr stattfinden?",
+        allgemein:"Gerne! Erzählen Sie mir noch kurz: wann und wo soll das ungefähr passieren?"
+      };
 
       function addMsg(text, who) {
         var el = document.createElement("div");
@@ -484,28 +536,34 @@
         setTimeout(function () { addMsg(text, "bot"); }, delay || 350);
       }
 
-      /* Begrüßung */
-      botSays("Grüß Gott! Was kann ich für Sie tun? Schreiben Sie mir einfach, worum es geht – zum Beispiel: „Können Sie mir nächsten Montag beim Umzug helfen?“", 400);
+      /* Eröffnung */
+      botSays("Wie kann ich Ihnen helfen?", 300);
 
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        var text = input.value.trim();
-        if (!text || step > 1) return;
-
+      function verarbeite(text) {
         addMsg(text, "user");
         input.value = "";
 
         if (step === 0) {
           anliegen = text;
+          kategorie = erkenneKategorie(text);
           step = 1;
-          botSays("Danke! Und wie erreiche ich Sie am besten? Bitte hinterlassen Sie mir Ihre Telefonnummer oder E-Mail-Adresse.");
+          if (chips) chips.style.display = "none";
+          botSays(RUECKFRAGE[kategorie]);
+          input.placeholder = "Ihre Antwort …";
+          return;
+        }
+
+        if (step === 1) {
+          details = text;
+          step = 2;
+          botSays("Danke! Und wie erreiche ich Sie am besten? Telefonnummer oder E-Mail genügt.");
           input.placeholder = "Telefonnummer oder E-Mail …";
           return;
         }
 
-        /* step === 1: Kontakt erhalten → absenden */
+        /* step === 2: Kontakt erhalten → absenden */
         kontakt = text;
-        step = 2;
+        step = 3;
         send.disabled = true;
         input.disabled = true;
         input.placeholder = "";
@@ -513,7 +571,13 @@
         fetch(WEBHOOK_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ anliegen: anliegen, kontakt: kontakt, seite: "montageservice" })
+          body: JSON.stringify({
+            anliegen: anliegen,
+            details: details,
+            kategorie: kategorie,
+            kontakt: kontakt,
+            seite: "montageservice"
+          })
         })
         .then(function (r) { return r.json(); })
         .then(function (data) {
@@ -523,12 +587,28 @@
         })
         .catch(function () {
           botSays("Entschuldigung – die Übertragung hat gerade nicht geklappt. Bitte versuchen Sie es in ein paar Minuten noch einmal oder nutzen Sie die Kontaktdaten im Impressum.");
-          step = 1;                 /* erneut senden erlauben */
+          step = 2;
           send.disabled = false;
           input.disabled = false;
           input.placeholder = "Telefonnummer oder E-Mail …";
         });
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var text = input.value.trim();
+        if (!text || step > 2) return;
+        verarbeite(text);
       });
+
+      /* Vorschlags-Chips: Klick = erste Nachricht */
+      if (chips) {
+        chips.addEventListener("click", function (e) {
+          var btn = e.target.closest(".chip");
+          if (!btn || step !== 0) return;
+          verarbeite(btn.textContent.trim());
+        });
+      }
     })();
   </script>
 
