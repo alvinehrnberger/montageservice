@@ -206,122 +206,122 @@
       font-weight: 500;
     }
 
-    /* ============================== CHAT-KONTAKT ============================== */
+    /* ============================== CHAT-KONTAKT (Prompt-Stil) ============================== */
     .contact { background: var(--ivory-deep); }
     .contact-head { text-align: center; }
 
-    .chat {
-      max-width: 36rem;
-      margin: 2.4rem auto 0;
-      background: var(--ivory);
-      border: 1px solid rgba(169, 133, 60, 0.45);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .chat-header {
-      padding: 0.85rem 1.3rem;
-      border-bottom: 1px solid rgba(169, 133, 60, 0.35);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 0.85rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      font-weight: 600;
-    }
-    .chat-header .dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: #5d8a4e;
-      flex: none;
+    .chat-title {
+      text-align: center;
+      font-size: clamp(1.35rem, 3.2vw, 2rem);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 1.6rem;
     }
 
     .chat-log {
-      padding: 1.3rem;
+      max-width: 38rem;
+      margin: 0 auto 1.2rem;
       display: flex;
       flex-direction: column;
       gap: 0.8rem;
-      min-height: 9rem;
-      max-height: 18rem;
+      max-height: 20rem;
       overflow-y: auto;
+      padding: 0.2rem;
     }
-
-    /* ---------- Vorschlags-Chips ---------- */
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      padding: 0 1.3rem 1.1rem;
-    }
-    .chip {
-      border: 1px solid var(--brass);
-      background: transparent;
-      color: var(--ink);
-      font-family: inherit;
-      font-size: 0.85rem;
-      letter-spacing: 0.03em;
-      padding: 0.45rem 0.95rem;
-      cursor: pointer;
-      transition: background 0.2s ease, color 0.2s ease;
-    }
-    .chip:hover, .chip:focus-visible { background: var(--brass); color: var(--ivory); }
-    .chip:focus-visible { outline: 3px solid var(--brass); outline-offset: 2px; }
+    .chat-log[hidden] { display: none; }
 
     .msg {
       max-width: 85%;
-      padding: 0.75rem 1rem;
+      padding: 0.75rem 1.1rem;
       font-size: 0.97rem;
       line-height: 1.5;
       animation: rise 0.4s ease both;
     }
     .msg--bot {
       align-self: flex-start;
-      background: var(--ivory-deep);
-      border-left: 2px solid var(--brass);
+      background: var(--ivory);
+      border-radius: 1.1rem;
+      border-bottom-left-radius: 0.3rem;
     }
     .msg--user {
       align-self: flex-end;
       background: var(--ink);
       color: var(--ivory);
+      border-radius: 1.1rem;
+      border-bottom-right-radius: 0.3rem;
     }
 
-    .chat-form {
-      display: flex;
-      gap: 0;
-      border-top: 1px solid rgba(169, 133, 60, 0.35);
-    }
-    .chat-form input {
-      flex: 1;
-      border: none;
+    .chat-bar {
+      max-width: 38rem;
+      margin: 0 auto;
+      position: relative;
+      display: block;
       background: var(--ivory);
-      padding: 1rem 1.2rem;
-      font-size: 1rem;
+      border: 1px solid rgba(169, 133, 60, 0.5);
+      border-radius: 1.2rem;
+      padding: 1.15rem 1.4rem 3.6rem;
+      box-shadow: 0 8px 24px rgba(28, 27, 24, 0.06);
+      transition: border-color 0.2s ease;
+    }
+    .chat-bar:focus-within { border-color: var(--brass); }
+    .chat-bar input {
+      width: 100%;
+      border: none;
+      background: transparent;
       font-family: inherit;
+      font-size: 1rem;
       color: var(--ink);
+      padding: 0;
       min-width: 0;
     }
-    .chat-form input:focus { outline: 3px solid var(--brass); outline-offset: -3px; }
-    .chat-form button {
+    .chat-bar input:focus { outline: none; }
+    .chat-bar button {
+      position: absolute;
+      right: 0.7rem;
+      bottom: 0.7rem;
+      width: 2.6rem;
+      height: 2.6rem;
+      border-radius: 0.85rem;
       border: none;
       background: var(--ink);
       color: var(--ivory);
-      padding: 0 1.6rem;
-      font-size: 0.95rem;
-      letter-spacing: 0.08em;
-      font-family: inherit;
+      font-size: 1.25rem;
+      line-height: 1;
       cursor: pointer;
-      transition: background 0.25s ease;
+      transition: background 0.2s ease;
     }
-    .chat-form button:hover, .chat-form button:focus-visible { background: var(--brass); }
-    .chat-form button:focus-visible { outline: 3px solid var(--brass); outline-offset: -3px; }
-    .chat-form button:disabled { opacity: 0.5; cursor: default; }
+    .chat-bar button:hover, .chat-bar button:focus-visible { background: var(--brass); }
+    .chat-bar button:focus-visible { outline: 3px solid var(--brass); outline-offset: 2px; }
+    .chat-bar button:disabled { opacity: 0.5; cursor: default; }
+
+    /* ---------- Vorschlags-Chips (Pillen) ---------- */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 1.1rem;
+    }
+    .chip {
+      border: 1px solid rgba(169, 133, 60, 0.6);
+      border-radius: 999px;
+      background: var(--ivory);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+      padding: 0.5rem 1.05rem;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .chip:hover, .chip:focus-visible { background: var(--brass); border-color: var(--brass); color: var(--ivory); }
+    .chip:focus-visible { outline: 3px solid var(--brass); outline-offset: 2px; }
 
     .chat-hint {
       text-align: center;
       font-size: 0.8rem;
       color: var(--ink-soft);
-      margin-top: 1rem;
+      margin-top: 1.2rem;
     }
     .chat-hint a { color: var(--ink-soft); }
 
@@ -370,23 +370,24 @@
         <span class="kicker">Kontakt</span>
       </div>
 
-      <div class="chat rise-2" aria-label="Kontakt-Chat">
-        <div class="chat-header"><span class="dot" aria-hidden="true"></span> Direkter Draht zu Alvin</div>
-        <div class="chat-log" id="chatLog" aria-live="polite"></div>
-        <div class="chips" id="chatChips" aria-label="Vorschläge">
-          <button type="button" class="chip">Möbel aufbauen</button>
-          <button type="button" class="chip">Auf- oder Abbau</button>
-          <button type="button" class="chip">Etwas anderes</button>
-        </div>
-        <form class="chat-form" id="chatForm">
-          <input type="text" id="chatInput" autocomplete="off"
-                 placeholder="Ihre Nachricht …"
-                 aria-label="Nachricht eingeben" required>
-          <button type="submit" id="chatSend">Senden</button>
-        </form>
+      <h2 class="chat-title rise-2" id="chatTitle">Wie kann ich Ihnen helfen?</h2>
+
+      <div class="chat-log" id="chatLog" aria-live="polite" hidden></div>
+
+      <form class="chat-bar rise-3" id="chatForm" aria-label="Kontakt-Chat">
+        <input type="text" id="chatInput" autocomplete="off"
+               placeholder="Beschreiben Sie Ihr Vorhaben in ein paar Worten …"
+               aria-label="Nachricht eingeben" required>
+        <button type="submit" id="chatSend" aria-label="Senden">↑</button>
+      </form>
+
+      <div class="chips rise-3" id="chatChips" aria-label="Vorschläge">
+        <button type="button" class="chip">Möbel aufbauen</button>
+        <button type="button" class="chip">Auf- oder Abbau</button>
+        <button type="button" class="chip">Etwas anderes</button>
       </div>
 
-      <p class="chat-hint">Ihre Nachricht geht direkt an mich. Kontaktdaten finden Sie im <a href="impressum.html">Impressum</a>.</p>
+      <p class="chat-hint">Ihre Nachricht geht direkt an mich – Alvin Ehrnberger. Kontaktdaten finden Sie im <a href="impressum.html">Impressum</a>.</p>
     </div>
   </section>
 
@@ -498,6 +499,7 @@
       var input = document.getElementById("chatInput");
       var send  = document.getElementById("chatSend");
       var chips = document.getElementById("chatChips");
+      var title = document.getElementById("chatTitle");
 
       var step = 0;   /* 0 = Anliegen, 1 = Details, 2 = Kontakt, 3 = fertig */
       var anliegen = "", details = "", kontakt = "", kategorie = "allgemein";
@@ -536,10 +538,9 @@
         setTimeout(function () { addMsg(text, "bot"); }, delay || 350);
       }
 
-      /* Eröffnung */
-      botSays("Wie kann ich Ihnen helfen?", 300);
-
       function verarbeite(text) {
+        if (log.hidden) log.hidden = false;
+        if (title) title.style.display = "none";
         addMsg(text, "user");
         input.value = "";
 
