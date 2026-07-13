@@ -484,15 +484,13 @@
 
   <script>
     /* ============================================================
-       Chat-Kontakt → n8n (Alvvyn Automation)  v2
-       Ablauf: 1) Anliegen (+Kategorie-Erkennung)  2) Detail-Rückfrage
-               3) Kontaktdaten  4) an n8n-Webhook senden
-       Kategorien & Rückfragen sind bewusst als einfache Regeln gebaut
-       (robust, kostenlos). Ein KI-Schritt kann später in n8n ergänzt
-       werden, ohne dass sich an dieser Seite etwas ändern muss.
+       KI-Chat → n8n (Alvvyn Automation / ZeitZurück)  v3
+       Die gesamte Gesprächsführung lebt serverseitig im n8n-Workflow
+       "Montageservice – KI-Chat (v2a)". Diese Seite sendet nur
+       {sessionId, message} und zeigt die Antwort an.
        ============================================================ */
     (function () {
-      var WEBHOOK_URL = "https://alvvyn.app.n8n.cloud/webhook/montage-anfrage";
+      var WEBHOOK_URL = "https://alvvyn.app.n8n.cloud/webhook/montage-chat";
 
       var log   = document.getElementById("chatLog");
       var form  = document.getElementById("chatForm");
@@ -501,30 +499,9 @@
       var chips = document.getElementById("chatChips");
       var title = document.getElementById("chatTitle");
 
-      var step = 0;   /* 0 = Anliegen, 1 = Details, 2 = Kontakt, 3 = fertig */
-      var anliegen = "", details = "", kontakt = "", kategorie = "allgemein";
-
-      /* Kategorie-Erkennung – tolerant gegenüber Tippfehlern/Umgangssprache */
-      var KAT = [
-        { id: "moebel", worte: ["möbel", "moebel", "mobel", "kasten", "kästen", "kasten", "schrank", "schränke", "regal", "ikea", "bett", "tisch", "kommode", "zusammenbauen", "zam bauen", "montieren", "montage", "aufbauen", "aufbaun"] },
-        { id: "aufabbau", worte: ["umzug", "übersiedlung", "uebersiedlung", "umziehen", "abbau", "abbauen", "aufbau bühne", "tragen", "transport", "ausräumen", "einräumen", "entrümpel"] }
-      ];
-
-      function erkenneKategorie(text) {
-        var t = text.toLowerCase();
-        for (var i = 0; i < KAT.length; i++) {
-          for (var j = 0; j < KAT[i].worte.length; j++) {
-            if (t.indexOf(KAT[i].worte[j]) !== -1) return KAT[i].id;
-          }
-        }
-        return "allgemein";
-      }
-
-      var RUECKFRAGE = {
-        moebel:   "Alles klar, Möbelmontage! Um wie viele Möbelstücke handelt es sich ungefähr – und sind alle Teile schon bei Ihnen vor Ort?",
-        aufabbau: "Gerne! Worum geht es genau, und wann soll es ungefähr stattfinden?",
-        allgemein:"Gerne! Erzählen Sie mir noch kurz: wann und wo soll das ungefähr passieren?"
-      };
+      var sessionId = "web-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+      var erste = true;
+      var wartet = false;
 
       function addMsg(text, who) {
         var el = document.createElement("div");
@@ -532,82 +509,59 @@
         el.textContent = text;
         log.appendChild(el);
         log.scrollTop = log.scrollHeight;
+        return el;
       }
 
-      function botSays(text, delay) {
-        setTimeout(function () { addMsg(text, "bot"); }, delay || 350);
-      }
-
-      function verarbeite(text) {
+      function sende(text) {
+        if (wartet) return;
         if (log.hidden) log.hidden = false;
-        if (title) title.style.display = "none";
+        if (erste) {
+          if (title) title.style.display = "none";
+          if (chips) chips.style.display = "none";
+          erste = false;
+        }
         addMsg(text, "user");
         input.value = "";
-
-        if (step === 0) {
-          anliegen = text;
-          kategorie = erkenneKategorie(text);
-          step = 1;
-          if (chips) chips.style.display = "none";
-          botSays(RUECKFRAGE[kategorie]);
-          input.placeholder = "Ihre Antwort …";
-          return;
-        }
-
-        if (step === 1) {
-          details = text;
-          step = 2;
-          botSays("Danke! Und wie erreiche ich Sie am besten? Telefonnummer oder E-Mail genügt.");
-          input.placeholder = "Telefonnummer oder E-Mail …";
-          return;
-        }
-
-        /* step === 2: Kontakt erhalten → absenden */
-        kontakt = text;
-        step = 3;
+        wartet = true;
         send.disabled = true;
-        input.disabled = true;
-        input.placeholder = "";
+
+        var denker = addMsg("…", "bot");
 
         fetch(WEBHOOK_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            anliegen: anliegen,
-            details: details,
-            kategorie: kategorie,
-            kontakt: kontakt,
-            seite: "montageservice"
-          })
+          body: JSON.stringify({ sessionId: sessionId, message: text, seite: "montageservice" })
         })
         .then(function (r) { return r.json(); })
         .then(function (data) {
-          botSays(data && data.reply
+          denker.textContent = (data && data.reply)
             ? data.reply
-            : "Vielen Dank! Ihre Anfrage ist angekommen. Ich melde mich so schnell wie möglich persönlich bei Ihnen.");
+            : "Vielen Dank! Ihre Nachricht ist angekommen.";
         })
         .catch(function () {
-          botSays("Entschuldigung – die Übertragung hat gerade nicht geklappt. Bitte versuchen Sie es in ein paar Minuten noch einmal oder nutzen Sie die Kontaktdaten im Impressum.");
-          step = 2;
+          denker.textContent = "Entschuldigung – die Verbindung hat gerade nicht geklappt. Bitte versuchen Sie es gleich noch einmal oder nutzen Sie die Kontaktdaten im Impressum.";
+        })
+        .finally(function () {
+          wartet = false;
           send.disabled = false;
-          input.disabled = false;
-          input.placeholder = "Telefonnummer oder E-Mail …";
+          input.focus();
+          log.scrollTop = log.scrollHeight;
         });
       }
 
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         var text = input.value.trim();
-        if (!text || step > 2) return;
-        verarbeite(text);
+        if (!text) return;
+        sende(text);
       });
 
       /* Vorschlags-Chips: Klick = erste Nachricht */
       if (chips) {
         chips.addEventListener("click", function (e) {
           var btn = e.target.closest(".chip");
-          if (!btn || step !== 0) return;
-          verarbeite(btn.textContent.trim());
+          if (!btn) return;
+          sende(btn.textContent.trim());
         });
       }
     })();
