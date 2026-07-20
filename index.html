@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- ===== SEO ===== -->
-  <title>Alvin Ehrnberger – Montageservice &amp; mehr | Wien &amp; Niederösterreich</title>
+  <title>Montageservice &amp; mehr | Wien &amp; Niederösterreich</title>
   <meta name="description" content="Montageservice und praktische Unterstützung in Wien und Niederösterreich. Zuverlässig, flexibel, persönlich – Anfrage direkt über den Chat.">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Alvin Ehrnberger – Montageservice & mehr">
+  <meta property="og:title" content="Montageservice & mehr">
   <meta property="og:description" content="Montageservice und praktische Unterstützung in Wien und Niederösterreich. Zuverlässig, flexibel, persönlich.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="de_AT">
@@ -20,7 +20,7 @@
 
   <style>
     /* ============================================================
-       ALVIN EHRNBERGER — MONTAGESERVICE & MEHR  (v2)
+       MONTAGESERVICE & MEHR  (v2)
        Design-System: abgeleitet von der Visitenkarte
        Ivory-Hintergrund · fast-schwarze Typografie · Messing-Akzente
        ============================================================ */
@@ -63,7 +63,7 @@
       height: 1px;
       background: var(--brass);
       border: none;
-      margin: 1.4rem auto;
+      margin: 1.1rem auto;
     }
     .rule--left { margin-inline: 0; }
 
@@ -80,29 +80,21 @@
       display: grid;
       place-content: center;
       text-align: center;
-      padding-block: clamp(2.8rem, 7vh, 4.5rem) clamp(2.2rem, 5vh, 3.5rem);
+      padding-block: clamp(1.4rem, 3.5vh, 2.4rem) clamp(1.1rem, 2.5vh, 1.8rem);
     }
 
     .hero h1 {
-      font-size: clamp(2rem, 7vw, 4.2rem);
+      font-size: clamp(1.7rem, 5vw, 3rem);
       font-weight: 700;
-      letter-spacing: clamp(0.12em, 1.5vw, 0.22em);
+      letter-spacing: clamp(0.1em, 1vw, 0.18em);
       text-transform: uppercase;
-    }
-
-    .hero .tagline {
-      font-size: clamp(0.85rem, 2.4vw, 1.15rem);
-      letter-spacing: clamp(0.28em, 1.2vw, 0.42em);
-      text-transform: uppercase;
-      color: var(--ink-soft);
-      font-weight: 500;
     }
 
     .hero .lead {
       max-width: 34rem;
-      margin: 2rem auto 0;
+      margin: 1.3rem auto 0;
       color: var(--ink-soft);
-      font-size: 1.05rem;
+      font-size: 1.02rem;
     }
 
     .cta-row {
@@ -164,6 +156,7 @@
     .card {
       background: var(--ivory);
       border: 1px solid rgba(169, 133, 60, 0.35);
+      border-radius: 0.8rem;
       padding: 1.8rem 1.6rem;
     }
     .card h3 { font-size: 1.02rem; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 0.5rem; }
@@ -211,9 +204,10 @@
 
     .chat {
       max-width: 36rem;
-      margin: 2.4rem auto 0;
+      margin: 1.8rem auto 0;
       background: var(--ivory);
       border: 1px solid rgba(169, 133, 60, 0.45);
+      border-radius: 1.1rem;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -241,7 +235,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.8rem;
-      min-height: 14rem;
+      min-height: 13rem;
       max-height: 22rem;
       overflow-y: auto;
     }
@@ -251,37 +245,43 @@
       padding: 0.75rem 1rem;
       font-size: 0.97rem;
       line-height: 1.5;
+      border-radius: 0.9rem;
       animation: rise 0.4s ease both;
     }
     .msg--bot {
       align-self: flex-start;
       background: var(--ivory-deep);
       border-left: 2px solid var(--brass);
+      border-top-left-radius: 0.25rem;
     }
     .msg--user {
       align-self: flex-end;
       background: var(--ink);
       color: var(--ivory);
+      border-bottom-right-radius: 0.25rem;
     }
 
     .chat-form {
       display: flex;
-      gap: 0;
+      gap: 0.6rem;
+      padding: 0.7rem;
       border-top: 1px solid rgba(169, 133, 60, 0.35);
     }
     .chat-form input {
       flex: 1;
-      border: none;
+      border: 1px solid rgba(169, 133, 60, 0.4);
+      border-radius: 999px;
       background: var(--ivory);
-      padding: 1rem 1.2rem;
+      padding: 0.85rem 1.2rem;
       font-size: 1rem;
       font-family: inherit;
       color: var(--ink);
       min-width: 0;
     }
-    .chat-form input:focus { outline: 3px solid var(--brass); outline-offset: -3px; }
+    .chat-form input:focus { outline: 3px solid var(--brass); outline-offset: 1px; }
     .chat-form button {
       border: none;
+      border-radius: 999px;
       background: var(--ink);
       color: var(--ivory);
       padding: 0 1.6rem;
@@ -292,7 +292,7 @@
       transition: background 0.25s ease;
     }
     .chat-form button:hover, .chat-form button:focus-visible { background: var(--brass); }
-    .chat-form button:focus-visible { outline: 3px solid var(--brass); outline-offset: -3px; }
+    .chat-form button:focus-visible { outline: 3px solid var(--brass); outline-offset: 2px; }
     .chat-form button:disabled { opacity: 0.5; cursor: default; }
 
     .chat-hint {
@@ -364,7 +364,7 @@
   </header>
 
   <!-- ============================== KONTAKT (CHAT) ============================== -->
-  <section class="contact" id="kontakt" style="padding-block: clamp(2.2rem, 5vh, 3.5rem) clamp(3rem, 7vh, 5rem);">
+  <section class="contact" id="kontakt" style="padding-block: clamp(1.2rem, 3vh, 2rem) clamp(2.4rem, 6vh, 4rem);">
     <div class="wrap">
       <div class="contact-head">
         <span class="kicker">Kontakt</span>
@@ -372,7 +372,7 @@
       </div>
 
       <div class="chat rise-3" aria-label="Kontakt-Chat">
-        <div class="chat-header"><span class="dot" aria-hidden="true"></span> Direkter Draht zu Alvin</div>
+        <div class="chat-header"><span class="dot" aria-hidden="true"></span> Ihr direkter Draht</div>
         <div class="chat-log" id="chatLog" aria-live="polite"></div>
         <form class="chat-form" id="chatForm">
           <input type="text" id="chatInput" autocomplete="off"
@@ -468,7 +468,7 @@
   <!-- ============================== FOOTER ============================== -->
   <footer>
     <div class="wrap">
-      <p>© 2026 Alvin Ehrnberger · Montageservice &amp; mehr<br>
+      <p>© 2026 Montageservice &amp; mehr<br>
          <span class="powered">Powered by ZeitZurück.at</span></p>
       <nav aria-label="Rechtliches">
         <a href="impressum.html">Impressum</a>
