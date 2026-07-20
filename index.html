@@ -80,15 +80,14 @@
       display: grid;
       place-content: center;
       text-align: center;
-      padding-block: clamp(2rem, 5vh, 3rem) clamp(1.4rem, 3vh, 2rem);
+      padding-block: clamp(2.8rem, 7vh, 4.5rem) clamp(2.2rem, 5vh, 3.5rem);
     }
 
     .hero h1 {
-      font-size: clamp(1.25rem, 4.6vw, 2.9rem);
+      font-size: clamp(2rem, 7vw, 4.2rem);
       font-weight: 700;
-      letter-spacing: clamp(0.06em, 0.9vw, 0.16em);
+      letter-spacing: clamp(0.12em, 1.5vw, 0.22em);
       text-transform: uppercase;
-      white-space: nowrap;
     }
 
     .hero .tagline {
@@ -101,9 +100,9 @@
 
     .hero .lead {
       max-width: 34rem;
-      margin: 1rem auto 0;
+      margin: 2rem auto 0;
       color: var(--ink-soft);
-      font-size: 1rem;
+      font-size: 1.05rem;
     }
 
     .cta-row {
@@ -206,124 +205,126 @@
       font-weight: 500;
     }
 
-    /* ============================== CHAT-KONTAKT (Prompt-Stil) ============================== */
+    /* ============================== CHAT-KONTAKT ============================== */
     .contact { background: var(--ivory-deep); }
     .contact-head { text-align: center; }
 
-    .chat-title {
-      text-align: center;
-      font-size: clamp(1.35rem, 3.2vw, 2rem);
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      margin-bottom: 1.6rem;
+    .chat {
+      max-width: 36rem;
+      margin: 2.4rem auto 0;
+      background: var(--ivory);
+      border: 1px solid rgba(169, 133, 60, 0.45);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      padding: 0.85rem 1.3rem;
+      border-bottom: 1px solid rgba(169, 133, 60, 0.35);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .chat-header .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #5d8a4e;
+      flex: none;
     }
 
     .chat-log {
-      max-width: 38rem;
-      margin: 0 auto 1.2rem;
+      padding: 1.3rem;
       display: flex;
       flex-direction: column;
       gap: 0.8rem;
-      max-height: 20rem;
+      min-height: 14rem;
+      max-height: 22rem;
       overflow-y: auto;
-      padding: 0.2rem;
     }
-    .chat-log[hidden] { display: none; }
 
     .msg {
       max-width: 85%;
-      padding: 0.75rem 1.1rem;
+      padding: 0.75rem 1rem;
       font-size: 0.97rem;
       line-height: 1.5;
       animation: rise 0.4s ease both;
     }
     .msg--bot {
       align-self: flex-start;
-      background: var(--ivory);
-      border-radius: 1.1rem;
-      border-bottom-left-radius: 0.3rem;
+      background: var(--ivory-deep);
+      border-left: 2px solid var(--brass);
     }
     .msg--user {
       align-self: flex-end;
       background: var(--ink);
       color: var(--ivory);
-      border-radius: 1.1rem;
-      border-bottom-right-radius: 0.3rem;
     }
 
-    .chat-bar {
-      max-width: 38rem;
-      margin: 0 auto;
-      position: relative;
-      display: block;
-      background: var(--ivory);
-      border: 1px solid rgba(169, 133, 60, 0.5);
-      border-radius: 1.2rem;
-      padding: 1.15rem 1.4rem 3.6rem;
-      box-shadow: 0 8px 24px rgba(28, 27, 24, 0.06);
-      transition: border-color 0.2s ease;
+    .chat-form {
+      display: flex;
+      gap: 0;
+      border-top: 1px solid rgba(169, 133, 60, 0.35);
     }
-    .chat-bar:focus-within { border-color: var(--brass); }
-    .chat-bar input {
-      width: 100%;
+    .chat-form input {
+      flex: 1;
       border: none;
-      background: transparent;
-      font-family: inherit;
+      background: var(--ivory);
+      padding: 1rem 1.2rem;
       font-size: 1rem;
+      font-family: inherit;
       color: var(--ink);
-      padding: 0;
       min-width: 0;
     }
-    .chat-bar input:focus { outline: none; }
-    .chat-bar button {
-      position: absolute;
-      right: 0.7rem;
-      bottom: 0.7rem;
-      width: 2.6rem;
-      height: 2.6rem;
-      border-radius: 0.85rem;
+    .chat-form input:focus { outline: 3px solid var(--brass); outline-offset: -3px; }
+    .chat-form button {
       border: none;
       background: var(--ink);
       color: var(--ivory);
-      font-size: 1.25rem;
-      line-height: 1;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    .chat-bar button:hover, .chat-bar button:focus-visible { background: var(--brass); }
-    .chat-bar button:focus-visible { outline: 3px solid var(--brass); outline-offset: 2px; }
-    .chat-bar button:disabled { opacity: 0.5; cursor: default; }
-
-    /* ---------- Vorschlags-Chips (Pillen) ---------- */
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      justify-content: center;
-      margin-top: 1.1rem;
-    }
-    .chip {
-      border: 1px solid rgba(169, 133, 60, 0.6);
-      border-radius: 999px;
-      background: var(--ivory);
-      color: var(--ink);
+      padding: 0 1.6rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
       font-family: inherit;
-      font-size: 0.85rem;
-      letter-spacing: 0.03em;
-      padding: 0.5rem 1.05rem;
       cursor: pointer;
-      transition: background 0.2s ease, color 0.2s ease;
+      transition: background 0.25s ease;
     }
-    .chip:hover, .chip:focus-visible { background: var(--brass); border-color: var(--brass); color: var(--ivory); }
-    .chip:focus-visible { outline: 3px solid var(--brass); outline-offset: 2px; }
+    .chat-form button:hover, .chat-form button:focus-visible { background: var(--brass); }
+    .chat-form button:focus-visible { outline: 3px solid var(--brass); outline-offset: -3px; }
+    .chat-form button:disabled { opacity: 0.5; cursor: default; }
 
     .chat-hint {
       text-align: center;
       font-size: 0.8rem;
       color: var(--ink-soft);
-      margin-top: 1.2rem;
+      margin-top: 1rem;
     }
     .chat-hint a { color: var(--ink-soft); }
+
+    /* ---------- WhatsApp Floating Button ----------
+       Bleibt VERSTECKT, bis unten im Script die echte Nummer eingetragen ist.
+       So ist ein Live-Betrieb ohne toten Link möglich. */
+    .wa-float {
+      position: fixed;
+      right: clamp(1rem, 4vw, 2rem);
+      bottom: clamp(1rem, 4vw, 2rem);
+      width: 3.6rem;
+      height: 3.6rem;
+      border-radius: 50%;
+      background: #25D366;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 18px rgba(28, 27, 24, 0.28);
+      z-index: 999;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .wa-float:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 10px 24px rgba(28, 27, 24, 0.35); }
+    .wa-float:focus-visible { outline: 3px solid var(--brass); outline-offset: 3px; }
+    .wa-float svg { width: 1.9rem; height: 1.9rem; fill: #fff; }
+    .wa-float[hidden] { display: none; }
+    .wa-float:not([hidden]) { display: flex; }
 
     /* ---------- Footer ---------- */
     footer {
@@ -358,7 +359,6 @@
     <div>
       <h1 class="rise">Montageservice &amp; mehr</h1>
       <hr class="rule rise-2" aria-hidden="true">
-      <p class="tagline rise-2">Alvin Ehrnberger</p>
       <p class="lead rise-3">Zuverlässige, praktische Unterstützung – persönlich, flexibel und direkt.</p>
     </div>
   </header>
@@ -368,26 +368,21 @@
     <div class="wrap">
       <div class="contact-head">
         <span class="kicker">Kontakt</span>
+        <h2 class="rise-2">Schreiben Sie mir einfach.</h2>
       </div>
 
-      <h2 class="chat-title rise-2" id="chatTitle">Wie kann ich Ihnen helfen?</h2>
-
-      <div class="chat-log" id="chatLog" aria-live="polite" hidden></div>
-
-      <form class="chat-bar rise-3" id="chatForm" aria-label="Kontakt-Chat">
-        <input type="text" id="chatInput" autocomplete="off"
-               placeholder="Beschreiben Sie Ihr Vorhaben in ein paar Worten …"
-               aria-label="Nachricht eingeben" required>
-        <button type="submit" id="chatSend" aria-label="Senden">↑</button>
-      </form>
-
-      <div class="chips rise-3" id="chatChips" aria-label="Vorschläge">
-        <button type="button" class="chip">Möbel aufbauen</button>
-        <button type="button" class="chip">Auf- oder Abbau</button>
-        <button type="button" class="chip">Etwas anderes</button>
+      <div class="chat rise-3" aria-label="Kontakt-Chat">
+        <div class="chat-header"><span class="dot" aria-hidden="true"></span> Direkter Draht zu Alvin</div>
+        <div class="chat-log" id="chatLog" aria-live="polite"></div>
+        <form class="chat-form" id="chatForm">
+          <input type="text" id="chatInput" autocomplete="off"
+                 placeholder="Ihre Nachricht …"
+                 aria-label="Nachricht eingeben" required>
+          <button type="submit" id="chatSend">Senden</button>
+        </form>
       </div>
 
-      <p class="chat-hint">Ihre Nachricht geht direkt an mich – Alvin Ehrnberger. Kontaktdaten finden Sie im <a href="impressum.html">Impressum</a>.</p>
+      <p class="chat-hint">Ihre Nachricht geht direkt an mich. Kontaktdaten finden Sie im <a href="impressum.html">Impressum</a>.</p>
     </div>
   </section>
 
@@ -482,26 +477,49 @@
     </div>
   </footer>
 
+  <!-- ============================== WHATSAPP-BUTTON ==============================
+       Schwebender WhatsApp-Button (Desktop + Mobil). Bleibt VERSTECKT,
+       bis unten im Script die echte Nummer eingetragen ist.
+  ======================================================================= -->
+  <a class="wa-float" id="waFloat" href="#" target="_blank" rel="noopener"
+     aria-label="Über WhatsApp schreiben" hidden>
+    <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M16 .5C7.4.5.5 7.4.5 16c0 2.8.8 5.5 2.2 7.9L.4 31.5l7.8-2.3c2.3 1.3 4.9 1.9 7.6 1.9h.1c8.6 0 15.5-6.9 15.5-15.5C31.5 7.4 24.6.5 16 .5zm0 28.3c-2.4 0-4.7-.6-6.7-1.8l-.5-.3-4.6 1.4 1.4-4.5-.3-.5c-1.3-2.1-2-4.5-2-7 0-7.1 5.8-12.9 13-12.9 3.4 0 6.7 1.3 9.1 3.8 2.4 2.4 3.8 5.7 3.8 9.1 0 7.1-5.8 12.9-13 12.9zm7.1-9.7c-.4-.2-2.3-1.1-2.6-1.3-.4-.1-.6-.2-.9.2-.3.4-1 1.3-1.2 1.5-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3.1-1.9-1.2-1-1.9-2.3-2.2-2.7-.2-.4 0-.6.2-.8.2-.2.4-.4.5-.7.2-.2.2-.4.4-.6.1-.3 0-.5 0-.7-.1-.2-.9-2.1-1.2-2.9-.3-.8-.6-.7-.9-.7h-.7c-.2 0-.6.1-1 .5-.3.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.8c.2.2 2.6 4 6.3 5.5.9.4 1.6.6 2.1.8.9.3 1.7.2 2.3.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.3-.7-.4z"/></svg>
+  </a>
+
   <script>
     /* ============================================================
-       KI-Chat → n8n (Alvvyn Automation / ZeitZurück)  v3
-       Die gesamte Gesprächsführung lebt serverseitig im n8n-Workflow
-       "Montageservice – KI-Chat (v2a)". Diese Seite sendet nur
-       {sessionId, message} und zeigt die Antwort an.
+       WhatsApp-Button aktivieren
+       → Trage HIER die echte WhatsApp-Nummer ein: internationale Form,
+         OHNE „+", OHNE Leerzeichen. Beispiel Österreich: "4366012345678".
+       → Leer lassen = der Button bleibt automatisch versteckt.
        ============================================================ */
     (function () {
-      var WEBHOOK_URL = "https://alvvyn.app.n8n.cloud/webhook/montage-chat";
+      var WA_NUMMER = "";  /* <-- HIER echte Nummer eintragen, z. B. "4366012345678" */
+      var WA_TEXT   = "Hallo, ich möchte eine Anfrage stellen.";
+      if (!WA_NUMMER) return;
+      var el = document.getElementById("waFloat");
+      if (!el) return;
+      el.href = "https://wa.me/" + WA_NUMMER + "?text=" + encodeURIComponent(WA_TEXT);
+      el.hidden = false;
+    })();
+  </script>
+
+  <script>
+    /* ============================================================
+       Chat-Kontakt → n8n (Alvvyn Automation)
+       Ablauf: 1) Anliegen  2) Kontaktdaten  3) an n8n-Webhook senden
+       ============================================================ */
+    (function () {
+      var WEBHOOK_URL = "https://alvvyn.app.n8n.cloud/webhook/montage-anfrage";
 
       var log   = document.getElementById("chatLog");
       var form  = document.getElementById("chatForm");
       var input = document.getElementById("chatInput");
       var send  = document.getElementById("chatSend");
-      var chips = document.getElementById("chatChips");
-      var title = document.getElementById("chatTitle");
 
-      var sessionId = "web-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
-      var erste = true;
-      var wartet = false;
+      var step = 0;             // 0 = Anliegen, 1 = Kontakt, 2 = fertig
+      var anliegen = "";
+      var kontakt = "";
 
       function addMsg(text, who) {
         var el = document.createElement("div");
@@ -509,61 +527,57 @@
         el.textContent = text;
         log.appendChild(el);
         log.scrollTop = log.scrollHeight;
-        return el;
       }
 
-      function sende(text) {
-        if (wartet) return;
-        if (log.hidden) log.hidden = false;
-        if (erste) {
-          if (title) title.style.display = "none";
-          if (chips) chips.style.display = "none";
-          erste = false;
-        }
-        addMsg(text, "user");
-        input.value = "";
-        wartet = true;
-        send.disabled = true;
-
-        var denker = addMsg("…", "bot");
-
-        fetch(WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ sessionId: sessionId, message: text, seite: "montageservice" })
-        })
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-          denker.textContent = (data && data.reply)
-            ? data.reply
-            : "Vielen Dank! Ihre Nachricht ist angekommen.";
-        })
-        .catch(function () {
-          denker.textContent = "Entschuldigung – die Verbindung hat gerade nicht geklappt. Bitte versuchen Sie es gleich noch einmal oder nutzen Sie die Kontaktdaten im Impressum.";
-        })
-        .finally(function () {
-          wartet = false;
-          send.disabled = false;
-          input.focus();
-          log.scrollTop = log.scrollHeight;
-        });
+      function botSays(text, delay) {
+        setTimeout(function () { addMsg(text, "bot"); }, delay || 350);
       }
+
+      /* Begrüßung */
+      botSays("Grüß Gott! Was kann ich für Sie tun? Schreiben Sie mir einfach, worum es geht – zum Beispiel: „Können Sie mir nächsten Montag beim Umzug helfen?“", 400);
 
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         var text = input.value.trim();
-        if (!text) return;
-        sende(text);
-      });
+        if (!text || step > 1) return;
 
-      /* Vorschlags-Chips: Klick = erste Nachricht */
-      if (chips) {
-        chips.addEventListener("click", function (e) {
-          var btn = e.target.closest(".chip");
-          if (!btn) return;
-          sende(btn.textContent.trim());
+        addMsg(text, "user");
+        input.value = "";
+
+        if (step === 0) {
+          anliegen = text;
+          step = 1;
+          botSays("Danke! Und wie erreiche ich Sie am besten? Bitte hinterlassen Sie mir Ihre Telefonnummer oder E-Mail-Adresse.");
+          input.placeholder = "Telefonnummer oder E-Mail …";
+          return;
+        }
+
+        /* step === 1: Kontakt erhalten → absenden */
+        kontakt = text;
+        step = 2;
+        send.disabled = true;
+        input.disabled = true;
+        input.placeholder = "";
+
+        fetch(WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ anliegen: anliegen, kontakt: kontakt, seite: "montageservice" })
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          botSays(data && data.reply
+            ? data.reply
+            : "Vielen Dank! Ihre Anfrage ist angekommen. Ich melde mich so schnell wie möglich persönlich bei Ihnen.");
+        })
+        .catch(function () {
+          botSays("Entschuldigung – die Übertragung hat gerade nicht geklappt. Bitte versuchen Sie es in ein paar Minuten noch einmal oder nutzen Sie die Kontaktdaten im Impressum.");
+          step = 1;                 /* erneut senden erlauben */
+          send.disabled = false;
+          input.disabled = false;
+          input.placeholder = "Telefonnummer oder E-Mail …";
         });
-      }
+      });
     })();
   </script>
 
