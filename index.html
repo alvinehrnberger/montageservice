@@ -65,7 +65,7 @@
       display: grid;
       place-content: center;
       text-align: center;
-      padding-block: clamp(2rem, 5vh, 3.5rem) clamp(1.8rem, 4vh, 3rem);
+      padding-block: clamp(1.4rem, 3.5vh, 2.6rem) clamp(1.4rem, 3vh, 2.4rem);
     }
     .hero h1 {
       font-size: clamp(1.5rem, 5.2vw, 2.8rem);
@@ -84,7 +84,7 @@
     }
     .hero .lead {
       max-width: 34rem;
-      margin: 2rem auto 0;
+      margin: 1.2rem auto 0;
       color: var(--ink-soft);
       font-size: 1.05rem;
     }
@@ -220,20 +220,46 @@
     }
     .msg--bot { align-self: flex-start; background: var(--ivory-deep); border-left: 2px solid var(--brass); }
     .msg--user { align-self: flex-end; background: var(--ink); color: var(--ivory); }
-    .chat-form { flex: none; display: flex; gap: 0; border-top: 1px solid rgba(169, 133, 60, 0.35); }
-    .chat-form input {
-      flex: 1; border: none; background: var(--ivory);
-      padding: 1rem 1.2rem; font-size: 1rem; font-family: inherit; color: var(--ink); min-width: 0;
-      border-bottom-left-radius: var(--radius);
+
+    .chat-form {
+      flex: none;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      border-top: 1px solid rgba(169, 133, 60, 0.35);
+      padding: 0.6rem;
     }
-    .chat-form input:focus { outline: 3px solid var(--brass); outline-offset: -3px; }
+    .chat-form textarea {
+      flex: 1;
+      border: 1px solid rgba(169, 133, 60, 0.45);
+      background: var(--ivory);
+      border-radius: 1.15rem;
+      padding: 0.6rem 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      line-height: 1.4;
+      color: var(--ink);
+      min-width: 0;
+      resize: none;
+      overflow-y: auto;
+      max-height: 6rem;
+    }
+    .chat-form textarea:focus { outline: none; border-color: var(--brass); box-shadow: 0 0 0 2px rgba(169,133,60,0.18); }
     .chat-form button {
-      border: none; background: var(--ink); color: var(--ivory);
-      padding: 0 1.6rem; font-size: 0.95rem; letter-spacing: 0.08em; font-family: inherit; cursor: pointer;
+      flex: none;
+      border: none;
+      background: var(--ink);
+      color: var(--ivory);
+      border-radius: 999px;
+      padding: 0.65rem 1.5rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      font-family: inherit;
+      cursor: pointer;
       transition: background 0.25s ease;
-      border-bottom-right-radius: var(--radius);
     }
     .chat-form button:hover, .chat-form button:focus-visible { background: var(--brass); }
+    .chat-form button:focus-visible { outline: 3px solid var(--brass); outline-offset: 2px; }
     .chat-form button:disabled { opacity: 0.5; cursor: default; }
     .chat-hint { text-align: center; font-size: 0.8rem; color: var(--ink-soft); margin-top: 1rem; }
     .chat-hint a { color: var(--ink-soft); }
@@ -270,7 +296,7 @@
     </div>
   </header>
 
-  <section class="contact" id="kontakt" style="padding-block: clamp(2rem, 4vh, 3rem) clamp(3rem, 7vh, 5rem);">
+  <section class="contact" id="kontakt" style="padding-block: clamp(1.6rem, 3.5vh, 2.6rem) clamp(3rem, 7vh, 5rem);">
     <div class="wrap">
       <div class="contact-head">
         <span class="kicker">Kontakt</span>
@@ -281,9 +307,9 @@
         <div class="chat-header"><span class="dot" aria-hidden="true"></span> Direkter Draht zu Alvin</div>
         <div class="chat-log" id="chatLog" aria-live="polite"></div>
         <form class="chat-form" id="chatForm">
-          <input type="text" id="chatInput" autocomplete="off"
-                 placeholder="Ihre Nachricht …"
-                 aria-label="Nachricht eingeben" required>
+          <textarea id="chatInput" rows="1" autocomplete="off"
+                 placeholder="Ihre Nachricht …  (Enter senden · Umschalt+Enter neue Zeile)"
+                 aria-label="Nachricht eingeben" required></textarea>
           <button type="submit" id="chatSend">Senden</button>
         </form>
       </div>
@@ -379,8 +405,6 @@
        Montageservice Website-Chat → KI-Engine (v2a) auf n8n.
        Konversationell: jede Nachricht geht an /montage-chat mit
        {message, sessionId}; die Antwort {reply} wird angezeigt.
-       Die Engine versteht die Anfrage, fragt nur Fehlendes,
-       schlägt Termine vor und bucht sie automatisch.
        ============================================================ */
     (function () {
       var WEBHOOK_URL = "https://alvvyn.app.n8n.cloud/webhook/montage-chat";
@@ -402,6 +426,11 @@
       }
       function botSays(text, delay) { setTimeout(function () { addMsg(text, "bot"); }, delay || 350); }
 
+      function autoGrow() {
+        input.style.height = "auto";
+        input.style.height = Math.min(input.scrollHeight, 96) + "px";
+      }
+
       /* Begrüßung */
       botSays("Hallo! Wie kann ich Ihnen helfen? Beschreiben Sie einfach, worum es geht – zum Beispiel: „Ich brauche nächste Woche ein IKEA PAX aufgebaut.“", 400);
 
@@ -409,6 +438,7 @@
         if (wartet) return;
         addMsg(text, "user");
         input.value = "";
+        autoGrow();
         wartet = true;
         send.disabled = true;
         var denker = addMsg("…", "bot");
@@ -441,6 +471,15 @@
         if (!text) return;
         sende(text);
       });
+
+      /* Enter sendet, Umschalt+Enter macht eine neue Zeile */
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          if (form.requestSubmit) { form.requestSubmit(); } else { sende(input.value.trim()); }
+        }
+      });
+      input.addEventListener("input", autoGrow);
 
       var toTop = document.getElementById("toTop");
       if (toTop) {
