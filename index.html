@@ -229,12 +229,14 @@
     .chat-form input {
       flex: 1; border: none; background: var(--ivory);
       padding: 1rem 1.2rem; font-size: 1rem; font-family: inherit; color: var(--ink); min-width: 0;
+      border-bottom-left-radius: var(--radius);
     }
     .chat-form input:focus { outline: 3px solid var(--brass); outline-offset: -3px; }
     .chat-form button {
       border: none; background: var(--ink); color: var(--ivory);
       padding: 0 1.6rem; font-size: 0.95rem; letter-spacing: 0.08em; font-family: inherit; cursor: pointer;
       transition: background 0.25s ease;
+      border-bottom-right-radius: var(--radius);
     }
     .chat-form button:hover, .chat-form button:focus-visible { background: var(--brass); }
     .chat-form button:focus-visible { outline: 3px solid var(--brass); outline-offset: -3px; }
@@ -427,7 +429,10 @@
       var toTop = document.getElementById("toTop");
       if (toTop) {
         toTop.addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
-        var onScroll = function(){ toTop.classList.toggle("show", window.scrollY > 420); };
+        var onScroll = function(){
+          var nearBottom = (window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 90;
+          toTop.classList.toggle("show", window.scrollY > 420 && !nearBottom);
+        };
         window.addEventListener("scroll", onScroll, {passive:true}); onScroll();
       }
     })();
