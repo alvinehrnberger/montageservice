@@ -184,8 +184,8 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      height: 22rem;
-      max-height: 68vh;
+      height: 24rem;
+      max-height: 70vh;
     }
     .chat-header {
       flex: none;
@@ -215,6 +215,7 @@
       font-size: 0.97rem;
       line-height: 1.5;
       border-radius: 0.6rem;
+      white-space: pre-wrap;
       animation: rise 0.4s ease both;
     }
     .msg--bot { align-self: flex-start; background: var(--ivory-deep); border-left: 2px solid var(--brass); }
@@ -374,50 +375,73 @@
   <button id="toTop" aria-label="Zurück nach oben" title="Nach oben">↑</button>
 
   <script>
+    /* ============================================================
+       Montageservice Website-Chat → KI-Engine (v2a) auf n8n.
+       Konversationell: jede Nachricht geht an /montage-chat mit
+       {message, sessionId}; die Antwort {reply} wird angezeigt.
+       Die Engine versteht die Anfrage, fragt nur Fehlendes,
+       schlägt Termine vor und bucht sie automatisch.
+       ============================================================ */
     (function () {
-      var WEBHOOK_URL = "https://alvvyn.app.n8n.cloud/webhook/montage-anfrage";
+      var WEBHOOK_URL = "https://alvvyn.app.n8n.cloud/webhook/montage-chat";
       var log   = document.getElementById("chatLog");
       var form  = document.getElementById("chatForm");
       var input = document.getElementById("chatInput");
       var send  = document.getElementById("chatSend");
-      var step = 0, anliegen = "", kontakt = "";
+
+      var sessionId = "web-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+      var wartet = false;
+
       function addMsg(text, who) {
         var el = document.createElement("div");
         el.className = "msg msg--" + who;
         el.textContent = text;
         log.appendChild(el);
         log.scrollTop = log.scrollHeight;
+        return el;
       }
       function botSays(text, delay) { setTimeout(function () { addMsg(text, "bot"); }, delay || 350); }
-      botSays("Hallo! Wie kann ich Ihnen helfen? Schreiben Sie mir einfach, worum es geht – zum Beispiel: „Können Sie mir nächsten Montag ein paar Möbel aufbauen?“", 400);
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        var text = input.value.trim();
-        if (!text || step > 1) return;
+
+      /* Begrüßung */
+      botSays("Hallo! Wie kann ich Ihnen helfen? Beschreiben Sie einfach, worum es geht – zum Beispiel: „Ich brauche nächste Woche ein IKEA PAX aufgebaut.“", 400);
+
+      function sende(text) {
+        if (wartet) return;
         addMsg(text, "user");
         input.value = "";
-        if (step === 0) {
-          anliegen = text; step = 1;
-          botSays("Danke! Und wie erreiche ich Sie am besten? Bitte hinterlassen Sie mir Ihre Telefonnummer oder E-Mail-Adresse.");
-          input.placeholder = "Telefonnummer oder E-Mail …";
-          return;
-        }
-        kontakt = text; step = 2;
-        send.disabled = true; input.disabled = true; input.placeholder = "";
+        wartet = true;
+        send.disabled = true;
+        var denker = addMsg("…", "bot");
+
         fetch(WEBHOOK_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ anliegen: anliegen, kontakt: kontakt, seite: "montageservice" })
+          body: JSON.stringify({ message: text, sessionId: sessionId, seite: "montageservice" })
         })
         .then(function (r) { return r.json(); })
         .then(function (data) {
-          botSays(data && data.reply ? data.reply : "Vielen Dank! Ihre Anfrage ist angekommen. Ich melde mich so schnell wie möglich persönlich bei Ihnen.");
+          denker.textContent = (data && data.reply)
+            ? data.reply
+            : "Vielen Dank! Ihre Nachricht ist angekommen – ich melde mich persönlich bei Ihnen.";
         })
         .catch(function () {
-          botSays("Entschuldigung – die Übertragung hat gerade nicht geklappt. Bitte versuchen Sie es in ein paar Minuten noch einmal oder nutzen Sie die Kontaktdaten im Impressum.");
-          step = 1; send.disabled = false; input.disabled = false; input.placeholder = "Telefonnummer oder E-Mail …";
+          denker.textContent = "Entschuldigung – die Verbindung hat gerade nicht geklappt. Bitte versuchen Sie es gleich noch einmal oder nutzen Sie die Kontaktdaten im Impressum.";
+        })
+        .finally(function () {
+          wartet = false;
+          send.disabled = false;
+          input.focus();
+          log.scrollTop = log.scrollHeight;
         });
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var text = input.value.trim();
+        if (!text) return;
+        sende(text);
       });
+
       var toTop = document.getElementById("toTop");
       if (toTop) {
         toTop.addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
