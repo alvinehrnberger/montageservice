@@ -92,6 +92,13 @@
     .msg--bot { align-self: flex-start; background: var(--ivory-deep); border-left: 2px solid var(--brass); }
     .msg--user { align-self: flex-end; background: var(--ink); color: var(--ivory); }
 
+    .chat-quick { flex: none; display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0 0.9rem 0.2rem; }
+    .chat-quick:empty { display: none; }
+    .chat-quick button { border: 1px solid rgba(169, 133, 60, 0.6); background: var(--ivory); color: var(--ink); border-radius: 999px; padding: 0.5rem 1rem; font-size: 0.86rem; font-family: inherit; cursor: pointer; transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+    .chat-quick button:hover, .chat-quick button:focus-visible { background: var(--brass); border-color: var(--brass); color: var(--ivory); }
+    .chat-quick button.primary { background: var(--ink); color: var(--ivory); border-color: var(--ink); }
+    .chat-quick button.primary:hover { background: var(--brass); border-color: var(--brass); }
+
     .chat-form { flex: none; display: flex; align-items: center; gap: 0.55rem; border-top: 1px solid rgba(169, 133, 60, 0.35); padding: 0.6rem; }
     .chat-form textarea { flex: 1; border: 1px solid rgba(169, 133, 60, 0.45); background: var(--ivory); border-radius: 1.15rem; padding: 0.6rem 1rem; font-size: 1rem; font-family: inherit; line-height: 1.4; color: var(--ink); min-width: 0; resize: none; overflow-y: auto; max-height: 6rem; }
     .chat-form textarea:focus { outline: none; border-color: var(--brass); box-shadow: 0 0 0 2px rgba(169,133,60,0.18); }
@@ -136,8 +143,9 @@
       </div>
 
       <div class="chat rise-3" aria-label="Kontakt-Chat">
-        <div class="chat-header"><span class="dot" aria-hidden="true"></span> Direkter Draht zu Alvin</div>
+        <div class="chat-header"><span class="dot" aria-hidden="true"></span> Kontakt</div>
         <div class="chat-log" id="chatLog" aria-live="polite"></div>
+        <div class="chat-quick" id="chatQuick" aria-label="Schnellauswahl"></div>
         <form class="chat-form" id="chatForm">
           <textarea id="chatInput" rows="1" autocomplete="off"
                  placeholder="Ihre Nachricht …"
@@ -227,6 +235,7 @@
       var form  = document.getElementById("chatForm");
       var input = document.getElementById("chatInput");
       var send  = document.getElementById("chatSend");
+      var quick = document.getElementById("chatQuick");
 
       var sessionId = "web-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
       var wartet = false;
@@ -246,10 +255,41 @@
         input.style.height = Math.min(input.scrollHeight, 96) + "px";
       }
 
+      /* ---- Schnellauswahl-Buttons (Bestätigen/Ändern, Terminwahl) ---- */
+      function clearQuick() { quick.innerHTML = ""; }
+      function addQuick(label, value, primary) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.textContent = label;
+        if (primary) b.className = "primary";
+        b.addEventListener("click", function () { if (wartet) return; sende(value); });
+        quick.appendChild(b);
+      }
+      function renderQuick(text) {
+        clearQuick();
+        var low = (text || "").toLowerCase();
+        if (low.indexOf("angaben bestätigen") > -1 || (low.indexOf("bestätigen") > -1 && low.indexOf("ändern") > -1)) {
+          addQuick("✓ Angaben bestätigen", "Angaben bestätigen", true);
+          addQuick("Angaben ändern", "Angaben ändern");
+          return;
+        }
+        var nums = [];
+        (text.match(/(^|\n)\s*(\d)[.)]/g) || []).forEach(function (m) {
+          var n = m.replace(/\D/g, "");
+          if (n && nums.indexOf(n) < 0) nums.push(n);
+        });
+        if (nums.length && (low.indexOf("nummer") > -1 || low.indexOf("welcher") > -1 || low.indexOf("termin") > -1)) {
+          nums.forEach(function (n) { addQuick("Termin " + n, n); });
+          addQuick("Anderer Wunschtermin", "Ich hätte gern einen anderen Termin");
+        }
+      }
+
+      /* Begrüßung */
       botSays("Hallo! Wie kann ich Ihnen helfen? Beschreiben Sie einfach, worum es geht – zum Beispiel: „Ich brauche nächste Woche ein IKEA PAX aufgebaut.“", 400);
 
       function sende(text) {
         if (wartet) return;
+        clearQuick();
         addMsg(text, "user");
         input.value = "";
         autoGrow();
@@ -264,9 +304,11 @@
         })
         .then(function (r) { return r.json(); })
         .then(function (data) {
-          denker.textContent = (data && data.reply)
+          var replyText = (data && data.reply)
             ? data.reply
             : "Vielen Dank! Ihre Nachricht ist angekommen – ich melde mich persönlich bei Ihnen.";
+          denker.textContent = replyText;
+          renderQuick(replyText);
         })
         .catch(function () {
           denker.textContent = "Entschuldigung – die Verbindung hat gerade nicht geklappt. Bitte versuchen Sie es gleich noch einmal oder nutzen Sie die Kontaktdaten im Impressum.";
@@ -286,6 +328,7 @@
         sende(text);
       });
 
+      /* Enter sendet, Umschalt+Enter macht eine neue Zeile */
       input.addEventListener("keydown", function (e) {
         if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
