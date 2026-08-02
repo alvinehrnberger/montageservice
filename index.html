@@ -319,8 +319,10 @@
         var denker = addMsg("…", "bot");
         denker.classList.add("tippt");
         denker.innerHTML = "<span><\/span><span><\/span><span><\/span>";
+        if(window.__zzUhr){ clearTimeout(window.__zzUhr); window.__zzUhr = null; }
         window.__zzUhr = setTimeout(function(){
           if(!denker.classList.contains("tippt")) return;
+          if(document.getElementById("zzWarte")) return;
           var d = document.createElement("div");
           d.className = "msg bot"; d.id = "zzWarte";
           d.textContent = "Einen Moment — ich schaue in den Kalender und trage den Termin ein.";
