@@ -325,7 +325,7 @@
           if(document.getElementById("zzWarte")) return;
           var d = document.createElement("div");
           d.className = "msg bot"; d.id = "zzWarte";
-          d.textContent = "Einen Moment — ich schaue in den Kalender und trage den Termin ein.";
+          d.textContent = "Einen Moment bitte …";
           if(denker.parentNode) denker.parentNode.insertBefore(d, denker.nextSibling);
           var lg = document.getElementById("chatLog"); if(lg) lg.scrollTop = lg.scrollHeight;
         }, 3500);
@@ -382,5 +382,25 @@
     })();
   </script>
 
+
+<script>
+(function(){
+  // Wenn der Kunde gerade eine Terminnummer geschickt hat, wird der Wartehinweis konkreter.
+  function letzteNutzernachricht(){
+    var m = document.querySelectorAll('.msg--user');
+    return m.length ? (m[m.length-1].textContent||'').trim() : '';
+  }
+  var beob = new MutationObserver(function(){
+    var w = document.getElementById('zzWarte');
+    if (!w || w.dataset.zzAngepasst) return;
+    if (/^[1-9][0-9]?[.)]?$/.test(letzteNutzernachricht())) {
+      w.textContent = 'Einen Moment bitte — der Termin wird eingetragen.';
+      w.dataset.zzAngepasst = '1';
+    }
+  });
+  var log = document.getElementById('chatLog');
+  if (log) beob.observe(log, {childList:true, subtree:true});
+})();
+</script>
 </body>
 </html>
